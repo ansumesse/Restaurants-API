@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Restaurants.Application.Services.Restuarants;
+using Restaurants.Application.Restuarants.Services;
 
 namespace Restaurants.API.Controllers
 {

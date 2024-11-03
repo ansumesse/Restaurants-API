@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Restaurants.Application.Services.Restuarants;
-using Restaurants.Domain.Repositories.Restaurants;
+using Restaurants.Application.Restuarants.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
