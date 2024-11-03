@@ -10,5 +10,6 @@ namespace Restaurants.Domain.Repositories.Restaurants
     public interface IRestaurantsRepository
     {
         Task<IEnumerable<Restaurant>> GetAllAsync();
+        Task<Restaurant> GetRestaurantByIdAsync(int id);
     }
 }

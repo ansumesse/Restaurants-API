@@ -10,5 +10,6 @@ namespace Restaurants.Application.Services.Restuarants
     public interface IRestaurantsService
     {
         Task<IEnumerable<Restaurant>> GetAllAsync();
+        Task<Restaurant> GetRestaurantByIdAsync(int id);
     }
 }
