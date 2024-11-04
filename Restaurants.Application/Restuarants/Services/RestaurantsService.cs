@@ -15,6 +15,12 @@ namespace Restaurants.Application.Restuarants.Services
         ILogger<RestaurantsService> logger,
         IMapper mapper) : IRestaurantsService
     {
+        public async Task<int> CreateAsync(CreateRestaurantDto dto)
+        {
+            logger.LogInformation("Creating restaurant");
+            return await restaurantsRepository.CreateAsync(mapper.Map<Restaurant>(dto));
+        }
+
         public async Task<IEnumerable<RestaurantDto>> GetAllAsync()
         {
             logger.LogInformation("Getting all restaurants");
