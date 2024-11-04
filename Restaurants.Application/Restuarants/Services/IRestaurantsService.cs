@@ -1,4 +1,5 @@
-﻿using Restaurants.Domain.Entities;
+﻿using Restaurants.Application.Restuarants.Dtos;
+using Restaurants.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Restaurants.Application.Restuarants.Services
 {
     public interface IRestaurantsService
     {
-        Task<IEnumerable<Restaurant>> GetAllAsync();
-        Task<Restaurant> GetRestaurantByIdAsync(int id);
+        Task<IEnumerable<RestaurantDto>> GetAllAsync();
+        Task<RestaurantDto> GetRestaurantByIdAsync(int id);
     }
 }
