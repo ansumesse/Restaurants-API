@@ -1,13 +1,13 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurants.Application.Restuarants.Dtos
+namespace Restaurants.Application.Restuarants.Commands.CreateRestaurant
 {
-    public class CreateRestaurantDto
+    public class CreateRestaurantCommand : IRequest<int>
     {
         public string Name { get; set; } = default!;
         public string Description { get; set; } = default!;
