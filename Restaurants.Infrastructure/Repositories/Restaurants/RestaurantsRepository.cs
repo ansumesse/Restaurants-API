@@ -33,5 +33,11 @@ namespace Restaurants.Infrastructure.Repositories.Restaurants
         {
             return await context.Restaurants.Include(r => r.Dishes).FirstOrDefaultAsync(r => r.Id == id);
         }
+
+        public async Task UpdateAsync(Restaurant entity)
+        {
+            context.Update(entity);
+            await context.SaveChangesAsync();
+        }
     }
 }
