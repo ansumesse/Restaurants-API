@@ -2,6 +2,8 @@
 using Restaurants.Application.Extensions;
 using Restaurants.Infrastructure.Extensions;
 using Restaurants.Infrastructure.Seeders;
+using Serilog;
+using Serilog.Events;
 
 namespace Restaurants.API
 {
@@ -14,6 +16,14 @@ namespace Restaurants.API
             // Add services to the container.
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.AddApplication();
+
+            builder.Host.UseSerilog((context, conf) =>
+            {
+                conf
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Information)
+                .WriteTo.Console(outputTemplate: "[{Timestamp:dd-MM HH:mm:ss} {Level:u3}] |{SourceContext}| {NewLine}{Message:lj}{NewLine}{Exception}");
+            });
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -32,6 +42,8 @@ namespace Restaurants.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
 
