@@ -18,7 +18,7 @@ namespace Restaurants.Application.Dishes.Commands.DeleteDishes
     {
         public async Task Handle(DeleteDishesCommand request, CancellationToken cancellationToken)
         {
-            logger.LogInformation("Remove dishes for restaurant: {restaurantId}", request.RestaurantId);
+            logger.LogWarning("Remove dishes for restaurant: {restaurantId}", request.RestaurantId);
 
             var restaurant = await restaurantsRepository.GetRestaurantByIdAsync(request.RestaurantId);
             if (restaurant is null)
