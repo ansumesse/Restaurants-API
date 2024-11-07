@@ -22,6 +22,7 @@ namespace Restaurants.API
                 configuration.ReadFrom.Configuration(context.Configuration));
 
             builder.Services.AddScoped<ErrorHandlingMiddleware>();
+            builder.Services.AddScoped<RequestTimeLoggingMiddleware>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -42,6 +43,7 @@ namespace Restaurants.API
             }
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<RequestTimeLoggingMiddleware>();
 
             app.UseSerilogRequestLogging();
 
