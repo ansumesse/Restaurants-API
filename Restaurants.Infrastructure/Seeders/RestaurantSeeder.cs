@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Restaurants.Domain.Constants;
 using Restaurants.Domain.Entities;
 using Restaurants.Infrastructure.Persistence;
 using System;
@@ -21,7 +23,32 @@ namespace Restaurants.Infrastructure.Seeders
                     await context.AddRangeAsync(restuarants);
                     await context.SaveChangesAsync();
                 }
+
+                if(!await context.Roles.AnyAsync())
+                {
+                    await context.AddRangeAsync(GetRoles());
+                    await context.SaveChangesAsync();
+                }
             }
+        }
+
+        private IEnumerable<IdentityRole> GetRoles()
+        {
+            List<IdentityRole> roles = [
+                new(UserRoles.User) 
+                {
+                    NormalizedName = UserRoles.User.ToUpper()
+                },
+                new(UserRoles.Owner)
+                {
+                    NormalizedName = UserRoles.Owner.ToUpper()
+                },
+                new(UserRoles.Admin)
+                {
+                    NormalizedName = UserRoles.Admin.ToUpper()
+                }
+                ];
+            return roles;
         }
 
         private IEnumerable<Restaurant> GetRestaurants()
