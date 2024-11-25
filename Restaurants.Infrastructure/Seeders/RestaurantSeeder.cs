@@ -11,7 +11,9 @@ using System.Threading.Tasks;
 
 namespace Restaurants.Infrastructure.Seeders
 {
-    internal class RestaurantSeeder(RestaurantDbContext context) : IRestaurantSeeder
+    internal class RestaurantSeeder(RestaurantDbContext context,
+        UserManager<User> userManager,
+        RoleManager<IdentityRole> roleManager) : IRestaurantSeeder
     {
         public async Task Seed()
         {
@@ -28,10 +30,27 @@ namespace Restaurants.Infrastructure.Seeders
                 {
                     await context.AddRangeAsync(GetRoles());
                     await context.SaveChangesAsync();
+                    await AdminSeeder();
                 }
             }
         }
 
+        private async Task AdminSeeder()
+        {
+            var result = await userManager.CreateAsync(new User
+            {
+                Email = "admin@gmail.com",
+                UserName = "admin@gmail.com",
+                DateOfBirth = new DateOnly(2003, 5, 1),
+                Nationality = "Egyption"
+            }, "Admin123*");
+            
+                var user = await userManager.FindByEmailAsync("admin@gmail.com");
+                var role = await roleManager.FindByNameAsync(UserRoles.Admin);
+                await userManager.AddToRoleAsync(user!, role!.Name!);
+
+            
+        }
         private IEnumerable<IdentityRole> GetRoles()
         {
             List<IdentityRole> roles = [
