@@ -21,7 +21,7 @@ namespace Restaurants.API.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = UserRoles.Admin)]
+        //[Authorize(Roles = UserRoles.Admin)]
         [HttpPost("UserRole")]
         public async Task<IActionResult> AssignUserRole(AssignUserRoleCommand command)
         {
