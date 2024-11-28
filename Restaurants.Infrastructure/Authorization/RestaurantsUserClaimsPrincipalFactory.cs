@@ -29,7 +29,7 @@ namespace Restaurants.Infrastructure.Authorization
             return new ClaimsPrincipal(id);
         }
     }
-    // my code
+    // my code the problem is in date format instead of mm => MM
 /*    public class RestaurantsUserClaimsPrincipalFactory(UserManager<User> userManager,
         RoleManager<IdentityRole> roleManager,
         IOptions<IdentityOptions> options)
