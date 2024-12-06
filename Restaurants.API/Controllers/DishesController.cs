@@ -25,6 +25,7 @@ namespace Restaurants.API.Controllers
         }
 
         [HttpGet("{dishId}")]
+        [Authorize(Policy = PolicyNames.AtLeast20)]
         public async Task<ActionResult<DishDto>> GetById(int restaurantId, int dishId)
         {
             var dish = await mediator.Send(new GetDishByIdForRestaurantQuery(restaurantId, dishId));

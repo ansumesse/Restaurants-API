@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurants.Infrastructure.Authorization.Constants
+namespace Restaurants.Domain.Constants
 {
     public static class AppClaimTypes
     {

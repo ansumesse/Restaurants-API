@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Restaurants.Domain.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,8 +27,10 @@ namespace Restaurants.Application.Users
             var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)!.Value;
             var email = user.FindFirst(c => c.Type == ClaimTypes.Email)!.Value;
             var roles = user.Claims.Where(c => c.Type == ClaimTypes.Role)!.Select(c => c.Value);
+            var dOB = DateOnly.ParseExact(user.FindFirst(c => c.Type == AppClaimTypes.DateOfBirth)?.Value!, "yyyy-MM-dd");
+            var nationality = user.FindFirst(c => c.Type == AppClaimTypes.Nationality)?.Value;
 
-            return new CurrentUser(userId, email, roles);
+            return new CurrentUser(userId, email, roles, nationality, dOB);
         }
     }
 }

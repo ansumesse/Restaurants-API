@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Restaurants.Domain.Constants;
 using Restaurants.Domain.Entities;
 using Restaurants.Infrastructure.Authorization.Constants;
 using System;
