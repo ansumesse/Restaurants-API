@@ -6,6 +6,7 @@ using Restaurants.Domain.Entities;
 using Restaurants.Domain.Repositories.Dishes;
 using Restaurants.Domain.Repositories.Restaurants;
 using Restaurants.Infrastructure.Authorization;
+using Restaurants.Infrastructure.Authorization.Constants;
 using Restaurants.Infrastructure.Persistence;
 using Restaurants.Infrastructure.Repositories.Dishes;
 using Restaurants.Infrastructure.Repositories.Restaurants;
@@ -33,6 +34,9 @@ namespace Restaurants.Infrastructure.Extensions
                 .AddRoles<IdentityRole>()
                 .AddClaimsPrincipalFactory<RestaurantsUserClaimsPrincipalFactory>()
                 .AddEntityFrameworkStores<RestaurantDbContext>();
+
+            services.AddAuthorizationBuilder()
+                .AddPolicy(PolicyNames.HasNationality, builder => builder.RequireClaim(AppClaimTypes.Nationality, "Polish", "German"));
         }
     }
 }

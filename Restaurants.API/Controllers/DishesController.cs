@@ -7,6 +7,7 @@ using Restaurants.Application.Dishes.Commands.DeleteDishes;
 using Restaurants.Application.Dishes.Dtos;
 using Restaurants.Application.Dishes.Queries.GetDishByIdForRestaurant;
 using Restaurants.Application.Dishes.Queries.GetDishesForRestaurant;
+using Restaurants.Infrastructure.Authorization.Constants;
 
 namespace Restaurants.API.Controllers
 {
@@ -16,6 +17,7 @@ namespace Restaurants.API.Controllers
     public class DishesController(IMediator mediator) : ControllerBase
     {
         [HttpGet]
+        [Authorize(Policy = PolicyNames.HasNationality)]
         public async Task<ActionResult<IEnumerable<DishDto>>> GetAll(int restaurantId)
         {
             var dishes = await mediator.Send(new GetDishesForRestaurantQuery(restaurantId));
@@ -36,6 +38,8 @@ namespace Restaurants.API.Controllers
         {
             command.RestaurantId = restaurantId;
             var dishId = await mediator.Send(command);
+
+            
 
             return CreatedAtAction(nameof(GetById), new { restaurantId, dishId }, null);
         }
