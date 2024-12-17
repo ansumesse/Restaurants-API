@@ -5,11 +5,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Restaurants.Domain.Constants;
 using Restaurants.Domain.Entities;
+using Restaurants.Domain.Interfaces;
 using Restaurants.Domain.Repositories.Dishes;
 using Restaurants.Domain.Repositories.Restaurants;
 using Restaurants.Infrastructure.Authorization;
 using Restaurants.Infrastructure.Authorization.Constants;
 using Restaurants.Infrastructure.Authorization.Requirements;
+using Restaurants.Infrastructure.Authorization.Services;
 using Restaurants.Infrastructure.Persistence;
 using Restaurants.Infrastructure.Repositories.Dishes;
 using Restaurants.Infrastructure.Repositories.Restaurants;
@@ -45,6 +47,8 @@ namespace Restaurants.Infrastructure.Extensions
                 builder => builder.AddRequirements(new MinimumAgeRequirement(20)));
 
             services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();
+
+            services.AddScoped<IRestaurantAuthorizationService, RestaurantAuthorizationService>();
         }
     }
 }
