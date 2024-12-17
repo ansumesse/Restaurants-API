@@ -10,5 +10,6 @@ namespace Restaurants.Infrastructure.Authorization.Constants
     {
         public const string HasNationality = "HasNationawlity";
         public const string AtLeast20 = "AtLeast20";
+        public const string AtLeast2Restaurants = "AtLeast2Restaurants";
     }
 }

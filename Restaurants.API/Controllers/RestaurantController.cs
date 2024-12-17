@@ -8,6 +8,7 @@ using Restaurants.Application.Restuarants.Dtos;
 using Restaurants.Application.Restuarants.Queries.GetAllRestaurants;
 using Restaurants.Application.Restuarants.Queries.GetRestaurantById;
 using Restaurants.Domain.Constants;
+using Restaurants.Infrastructure.Authorization.Constants;
 namespace Restaurants.API.Controllers
 {
     [Route("api/[controller]")]
@@ -16,7 +17,7 @@ namespace Restaurants.API.Controllers
     public class RestaurantController(IMediator mediator) : ControllerBase
     {
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = PolicyNames.AtLeast2Restaurants)]
         public async Task<ActionResult<IEnumerable<RestaurantDto>>> GetAll()
         {
             return Ok(await mediator.Send(new GetAllRestaurantsQuery()));

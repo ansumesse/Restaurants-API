@@ -11,6 +11,7 @@ using Restaurants.Domain.Repositories.Restaurants;
 using Restaurants.Infrastructure.Authorization;
 using Restaurants.Infrastructure.Authorization.Constants;
 using Restaurants.Infrastructure.Authorization.Requirements;
+using Restaurants.Infrastructure.Authorization.Requirements.MinimalNumberOfCreatedRestaurant;
 using Restaurants.Infrastructure.Authorization.Services;
 using Restaurants.Infrastructure.Persistence;
 using Restaurants.Infrastructure.Repositories.Dishes;
@@ -41,12 +42,15 @@ namespace Restaurants.Infrastructure.Extensions
                 .AddEntityFrameworkStores<RestaurantDbContext>();
 
             services.AddAuthorizationBuilder()
-                .AddPolicy(PolicyNames.HasNationality, 
+                .AddPolicy(PolicyNames.HasNationality,
                 builder => builder.RequireClaim(AppClaimTypes.Nationality, "Polish", "German"))
-                .AddPolicy(PolicyNames.AtLeast20, 
-                builder => builder.AddRequirements(new MinimumAgeRequirement(20)));
+                .AddPolicy(PolicyNames.AtLeast20,
+                builder => builder.AddRequirements(new MinimumAgeRequirement(20)))
+                .AddPolicy(PolicyNames.AtLeast2Restaurants,
+                builder => builder.AddRequirements(new MinimalNumberOfCreatedRestaurantRequirement(2)));
 
             services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();
+            services.AddScoped<IAuthorizationHandler, MinimalNumberOfCreatedRestaurantRequirementHandler>();
 
             services.AddScoped<IRestaurantAuthorizationService, RestaurantAuthorizationService>();
         }
