@@ -20,5 +20,9 @@ namespace Restaurants.Domain.Entities
 
         public Address? Address { get; set; }
         public ICollection<Dish> Dishes { get; set; } = new HashSet<Dish>();
+
+        public User Owner { get; set; } = default!;
+
+        public string OwnerId { get; set; } = default!;
     }
 }

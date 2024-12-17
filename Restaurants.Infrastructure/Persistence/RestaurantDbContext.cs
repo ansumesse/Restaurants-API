@@ -19,6 +19,11 @@ namespace Restaurants.Infrastructure.Persistence
 
             modelBuilder.Entity<Restaurant>()
                 .OwnsOne<Address>(r => r.Address);
+
+            modelBuilder.Entity<User>()
+                .HasMany(o => o.OwnedRestaurants)
+                .WithOne(r => r.Owner)
+                .HasForeignKey(r => r.OwnerId);
         }
     }
 }
