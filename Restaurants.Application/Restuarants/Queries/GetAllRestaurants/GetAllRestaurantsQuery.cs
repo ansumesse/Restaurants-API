@@ -10,5 +10,6 @@ namespace Restaurants.Application.Restuarants.Queries.GetAllRestaurants
 {
     public class GetAllRestaurantsQuery : IRequest<IEnumerable<RestaurantDto>>
     {
+        public string? SearchedPhrase { get; set; }
     }
 }
