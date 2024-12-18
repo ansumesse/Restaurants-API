@@ -10,7 +10,7 @@ namespace Restaurants.Domain.Repositories.Restaurants
     public interface IRestaurantsRepository
     {
         Task<IEnumerable<Restaurant>> GetAllAsync();
-        Task<IEnumerable<Restaurant>> GetAllMatchingAsync(string? searchedPhrase);
+        Task<(IEnumerable<Restaurant>, int)> GetAllMatchingAsync(string? searchedPhrase, int pageSize, int pageNumber);
         Task<Restaurant?> GetRestaurantByIdAsync(int id);
         Task<int> CreateAsync(Restaurant entity);
         Task DeleteAsync(Restaurant entity);

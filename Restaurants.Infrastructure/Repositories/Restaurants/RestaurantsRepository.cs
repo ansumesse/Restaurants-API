@@ -30,13 +30,21 @@ namespace Restaurants.Infrastructure.Repositories.Restaurants
             return await context.Restaurants.ToListAsync();
         }
 
-        public async Task<IEnumerable<Restaurant>> GetAllMatchingAsync(string? searchedPhrase)
+        public async Task<(IEnumerable<Restaurant>, int)> GetAllMatchingAsync(string? searchedPhrase, int pageSize, int pageNumber)
         {
             var searchedPhraseLower = searchedPhrase?.ToLower();
-            return await context.Restaurants
+            var baseQuery = context.Restaurants
                 .Where(r => searchedPhraseLower == null || (EF.Functions.Like(r.Name, $"%{searchedPhraseLower}%") ||
-                EF.Functions.Like(r.Description, $"%{searchedPhraseLower}%")))
+                EF.Functions.Like(r.Description, $"%{searchedPhraseLower}%")));
+
+            var restaurantsCount = await baseQuery.CountAsync();
+
+            var result = await baseQuery
+                .Skip(pageSize * (pageNumber - 1))
+                .Take(pageSize)
                 .ToListAsync();
+
+            return (result, restaurantsCount);
         }
 
         public async Task<Restaurant?> GetRestaurantByIdAsync(int id)
