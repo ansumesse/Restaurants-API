@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restaurants.Application.Dishes.Commands.CreateDish;
 using Restaurants.Application.Dishes.Commands.DeleteDishes;
+using Restaurants.Application.Dishes.Commands.UpdateDish;
 using Restaurants.Application.Dishes.Dtos;
 using Restaurants.Application.Dishes.Queries.GetDishByIdForRestaurant;
 using Restaurants.Application.Dishes.Queries.GetDishesForRestaurant;
+using Restaurants.Application.Restuarants.Commands.UpdateRestaurant;
 using Restaurants.Infrastructure.Authorization.Constants;
 
 namespace Restaurants.API.Controllers
@@ -25,7 +27,7 @@ namespace Restaurants.API.Controllers
         }
 
         [HttpGet("{dishId}")]
-        [Authorize(Policy = PolicyNames.AtLeast20)]
+        //[Authorize(Policy = PolicyNames.AtLeast20)]
         public async Task<ActionResult<DishDto>> GetById(int restaurantId, int dishId)
         {
             var dish = await mediator.Send(new GetDishByIdForRestaurantQuery(restaurantId, dishId));
@@ -43,6 +45,15 @@ namespace Restaurants.API.Controllers
             
 
             return CreatedAtAction(nameof(GetById), new { restaurantId, dishId }, null);
+        }
+
+        [HttpPatch("{dishId}")]
+        public async Task<IActionResult> UpdateDish(int restaurantId, int dishId, UpdateDishCommand command)
+        {
+            command.RestaurantId = restaurantId;
+            command.DishId = dishId;
+            await mediator.Send(command);
+            return NoContent();
         }
 
         [HttpDelete]
