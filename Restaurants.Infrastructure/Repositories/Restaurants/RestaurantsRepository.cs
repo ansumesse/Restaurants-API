@@ -27,6 +27,12 @@ namespace Restaurants.Infrastructure.Repositories.Restaurants
             await context.SaveChangesAsync();
         }
 
+        public async Task FavoriteAsync(FavoriteRestaurant entity)
+        {
+            await context.FavoriteRestaurants.AddAsync(entity);
+            await context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Restaurant>> GetAllAsync()
         {
             return await context.Restaurants.ToListAsync();
@@ -75,5 +81,7 @@ namespace Restaurants.Infrastructure.Repositories.Restaurants
             context.Update(entity);
             await context.SaveChangesAsync();
         }
+
+
     }
 }

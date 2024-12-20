@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Restaurants.Application.Common;
 using Restaurants.Application.Restuarants.Commands.CreateRestaurant;
 using Restaurants.Application.Restuarants.Commands.DeleteRestaurant;
+using Restaurants.Application.Restuarants.Commands.FavoriteRestaurant;
 using Restaurants.Application.Restuarants.Commands.UpdateRestaurant;
 using Restaurants.Application.Restuarants.Dtos;
 using Restaurants.Application.Restuarants.Queries.GetAllRestaurants;
@@ -58,6 +59,13 @@ namespace Restaurants.API.Controllers
         {
             await mediator.Send(new DeleteRestaurantCommand(id));
                 return NoContent();
+        }
+
+        [HttpPost("FavoriteRestaurant/{id}")]
+        public async Task<IActionResult> FavoriteRestaurant(int id)
+        {
+            await mediator.Send(new FavoriteRestaurantCommand(id));
+            return NoContent();
         }
     }
 }

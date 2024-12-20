@@ -16,5 +16,6 @@ namespace Restaurants.Domain.Repositories.Restaurants
         Task<int> CreateAsync(Restaurant entity);
         Task DeleteAsync(Restaurant entity);
         Task UpdateAsync(Restaurant entity);
+        Task FavoriteAsync(FavoriteRestaurant entity);
     }
 }
