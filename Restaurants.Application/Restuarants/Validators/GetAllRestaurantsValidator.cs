@@ -29,6 +29,7 @@ namespace Restaurants.Application.Restuarants.Validators
 
             RuleFor(q => q.SortBy)
                 .Must(p => allowedSortByColumnNames.Contains(p))
+                .When(q => !string.IsNullOrEmpty(q.SortBy))
                 .WithMessage($"Sort by is optional, or must be in [{string.Join(",", allowedSortByColumnNames)}]");
         }
     }
