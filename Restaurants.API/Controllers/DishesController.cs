@@ -1,14 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restaurants.Application.Dishes.Commands.CreateDish;
+using Restaurants.Application.Dishes.Commands.DeleteDish;
 using Restaurants.Application.Dishes.Commands.DeleteDishes;
 using Restaurants.Application.Dishes.Commands.UpdateDish;
 using Restaurants.Application.Dishes.Dtos;
 using Restaurants.Application.Dishes.Queries.GetDishByIdForRestaurant;
 using Restaurants.Application.Dishes.Queries.GetDishesForRestaurant;
-using Restaurants.Application.Restuarants.Commands.UpdateRestaurant;
 using Restaurants.Infrastructure.Authorization.Constants;
 
 namespace Restaurants.API.Controllers
@@ -61,6 +60,14 @@ namespace Restaurants.API.Controllers
         public async Task<IActionResult> DeleteAll(int restaurantId)
         {
             await mediator.Send(new DeleteDishesCommand(restaurantId));
+            return NoContent();
+        }
+
+        [HttpDelete("{dishId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> DeleteDish(int restaurantId, int dishId)
+        {
+            await mediator.Send(new DeleteDishCommand(restaurantId, dishId));
             return NoContent();
         }
     }

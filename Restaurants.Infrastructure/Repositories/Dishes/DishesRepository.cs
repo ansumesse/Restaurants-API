@@ -28,6 +28,11 @@ namespace Restaurants.Infrastructure.Repositories.Dishes
             context.Update(entity);
             await context.SaveChangesAsync();
         }
+        public async Task DeleteDish(Dish entity)
+        {
+            context.Remove(entity);
+            await context.SaveChangesAsync();
+        }
 
         public async Task DeleteAllAsync(IEnumerable<Dish> entities)
         {
