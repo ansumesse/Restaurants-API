@@ -11,6 +11,7 @@ namespace Restaurants.Infrastructure.Persistence
 {
     internal class RestaurantDbContext(DbContextOptions options) : IdentityDbContext<User>(options)
     {
+        public DbSet<FavoriteDish> FavoriteDishes { get; set; }
         internal DbSet<FavoriteRestaurant> FavoriteRestaurants { get; set; }
         internal DbSet<Restaurant> Restaurants  { get; set; }
         internal DbSet<Dish> Dishes { get; set; }
