@@ -17,5 +17,7 @@ namespace Restaurants.Domain.Repositories.Restaurants
         Task DeleteAsync(Restaurant entity);
         Task UpdateAsync(Restaurant entity);
         Task FavoriteAsync(FavoriteRestaurant entity);
+        Task UnFavoriteAsync(FavoriteRestaurant entity);
+        Task<FavoriteRestaurant?> GetFavoriteRestaurant(string userId, int restaurantId); 
     }
 }
