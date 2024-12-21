@@ -42,7 +42,7 @@ namespace Restaurants.Infrastructure.Seeders
                 Email = "admin@gmail.com",
                 UserName = "admin@gmail.com",
                 DateOfBirth = new DateOnly(2003, 5, 1),
-                Nationality = "Egyption"
+                Nationality = "Egyptian"
             }, "Admin123*");
             
                 var user = await userManager.FindByEmailAsync("admin@gmail.com");
