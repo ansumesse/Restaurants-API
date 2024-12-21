@@ -1,16 +1,9 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using Restaurants.Application.Users;
-using Restaurants.Domain.Entities;
 using Restaurants.Domain.Exceptions;
 using Restaurants.Domain.Repositories.Dishes;
 using Restaurants.Domain.Repositories.Restaurants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Restaurants.Application.Restuarants.Commands.UnFavoriteDish
 {

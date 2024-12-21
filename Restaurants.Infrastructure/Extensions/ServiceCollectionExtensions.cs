@@ -17,11 +17,6 @@ using Restaurants.Infrastructure.Persistence;
 using Restaurants.Infrastructure.Repositories.Dishes;
 using Restaurants.Infrastructure.Repositories.Restaurants;
 using Restaurants.Infrastructure.Seeders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Restaurants.Infrastructure.Extensions
 {

@@ -2,13 +2,7 @@
 using Microsoft.Extensions.Options;
 using Restaurants.Domain.Constants;
 using Restaurants.Domain.Entities;
-using Restaurants.Infrastructure.Authorization.Constants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Restaurants.Infrastructure.Authorization
 {

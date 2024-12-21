@@ -6,11 +6,6 @@ using Restaurants.Domain.Entities;
 using Restaurants.Domain.Exceptions;
 using Restaurants.Domain.Interfaces;
 using Restaurants.Domain.Repositories.Restaurants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Restaurants.Application.Restuarants.Commands.UpdateRestaurant
 {

@@ -3,12 +3,7 @@ using Restaurants.Domain.Constants;
 using Restaurants.Domain.Entities;
 using Restaurants.Domain.Repositories.Restaurants;
 using Restaurants.Infrastructure.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Restaurants.Infrastructure.Repositories.Restaurants
 {

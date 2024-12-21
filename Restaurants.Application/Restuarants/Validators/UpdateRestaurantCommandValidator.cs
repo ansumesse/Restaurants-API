@@ -1,10 +1,5 @@
 ﻿using FluentValidation;
 using Restaurants.Application.Restuarants.Commands.UpdateRestaurant;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Restaurants.Application.Restuarants.Validators
 {
