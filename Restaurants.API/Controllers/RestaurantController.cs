@@ -61,19 +61,5 @@ namespace Restaurants.API.Controllers
             await mediator.Send(new DeleteRestaurantCommand(id));
                 return NoContent();
         }
-
-        [HttpPost("FavoriteRestaurant/{id}")]
-        public async Task<IActionResult> FavoriteRestaurant(int id)
-        {
-            await mediator.Send(new FavoriteRestaurantCommand(id));
-            return NoContent();
-        }
-
-        [HttpDelete("UnFavoriteRestaurant/{id}")]
-        public async Task<IActionResult> UnFavoriteRestaurant(int id)
-        {
-            await mediator.Send(new UnFavoriteRestaurantCommand(id));
-            return NoContent();
-        }
     }
 }
