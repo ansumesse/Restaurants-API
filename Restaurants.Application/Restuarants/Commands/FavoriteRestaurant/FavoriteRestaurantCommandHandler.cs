@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Restaurants.Application.Restuarants.Commands.FavoriteRestaurant
 {
-    public class UnFavoriteRestaurantCommandHandler(ILogger<UnFavoriteRestaurantCommandHandler> logger,
+    public class FavoriteRestaurantCommandHandler(ILogger<FavoriteRestaurantCommandHandler> logger,
         IRestaurantsRepository restaurantsRepository,
         IUserContext userContext) : IRequestHandler<FavoriteRestaurantCommand>
     {
