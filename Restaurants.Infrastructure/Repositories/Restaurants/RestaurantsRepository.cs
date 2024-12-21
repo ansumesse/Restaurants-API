@@ -111,6 +111,13 @@ namespace Restaurants.Infrastructure.Repositories.Restaurants
             return await context.Restaurants.Include(r => r.Dishes).FirstOrDefaultAsync(r => r.Id == id);
         }
 
+        public async Task<IEnumerable<Restaurant>> GetRestaurantsByIdsAsync(IEnumerable<int> ids)
+        {
+            return await context.Restaurants
+                .Where(r => ids.Contains(r.Id))
+                .ToListAsync();
+        }
+
         public async Task UpdateAsync(Restaurant entity)
         {
             context.Update(entity);

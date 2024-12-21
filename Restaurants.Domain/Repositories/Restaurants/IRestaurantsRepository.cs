@@ -13,6 +13,7 @@ namespace Restaurants.Domain.Repositories.Restaurants
         Task<IEnumerable<Restaurant>> GetAllAsync();
         Task<(IEnumerable<Restaurant>, int)> GetAllMatchingAsync(string? searchedPhrase, int pageSize, int pageNumber, string? sortBy, SortDirection sortDirection);
         Task<Restaurant?> GetRestaurantByIdAsync(int id);
+        Task<IEnumerable<Restaurant>> GetRestaurantsByIdsAsync(IEnumerable<int> ids);
         Task<int> CreateAsync(Restaurant entity);
         Task DeleteAsync(Restaurant entity);
         Task UpdateAsync(Restaurant entity);
