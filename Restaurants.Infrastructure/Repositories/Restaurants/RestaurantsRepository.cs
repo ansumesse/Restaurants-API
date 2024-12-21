@@ -37,6 +37,20 @@ namespace Restaurants.Infrastructure.Repositories.Restaurants
             context.FavoriteRestaurants.Remove(entity);
             await context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<FavoriteRestaurant>> GetFavoriteRestaurants(string userId, int? restaurantId = null)
+        {
+            var query = context.FavoriteRestaurants.AsQueryable();
+
+            query = query.Where(f => f.UserId == userId);
+
+            if (restaurantId.HasValue)
+                query = query.Where(f => f.RestaurantId == restaurantId.Value);
+
+            return await query
+                .ToListAsync();
+        }
+
         public async Task FavoriteDishAsync(FavoriteDish entity)
         {
             await context.FavoriteDishes.AddAsync(entity);
@@ -48,10 +62,6 @@ namespace Restaurants.Infrastructure.Repositories.Restaurants
             await context.SaveChangesAsync();
         }
 
-        public async Task<FavoriteRestaurant?> GetFavoriteRestaurant(string userId, int restaurantId)
-        {
-            return await context.FavoriteRestaurants.FirstOrDefaultAsync(f => f.UserId == userId && f.RestaurantId == restaurantId);
-        }
         
         public async Task<FavoriteDish?> GetFavoriteDish(string userId, int restaurantId, int dishId)
         {

@@ -20,7 +20,7 @@ namespace Restaurants.Domain.Repositories.Restaurants
         Task UnFavoriteAsync(FavoriteRestaurant entity);
         Task FavoriteDishAsync(FavoriteDish entity);
         Task UnFavoriteDishAsync(FavoriteDish entity);
-        Task<FavoriteRestaurant?> GetFavoriteRestaurant(string userId, int restaurantId);
+        Task<IEnumerable<FavoriteRestaurant>> GetFavoriteRestaurants(string userId, int? restaurantId = null);
         Task<FavoriteDish?> GetFavoriteDish(string userId, int restaurantId, int dishId);
     }
 }

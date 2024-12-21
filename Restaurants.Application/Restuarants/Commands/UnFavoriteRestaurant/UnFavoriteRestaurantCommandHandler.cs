@@ -28,12 +28,12 @@ namespace Restaurants.Application.Restuarants.Commands.UnFavoriteRestaurant
             if (restaurant is null)
                 throw new NotFoundException(nameof(restaurant), request.RestaurantId.ToString());
 
-            var dbFav = await restaurantsRepository.GetFavoriteRestaurant(user.Id, request.RestaurantId);
+            var dbFav = await restaurantsRepository.GetFavoriteRestaurants(user.Id, request.RestaurantId);
 
-            if (dbFav is null)
+            if (dbFav.Count() == 0)
                 throw new InvalidOperationException("You don't have this restaurant in you Favorites.");
 
-            await restaurantsRepository.UnFavoriteAsync(dbFav);
+            await restaurantsRepository.UnFavoriteAsync(dbFav.First());
         }
     }
 }
