@@ -19,6 +19,8 @@ namespace Restaurants.API.Controllers
     {
         [HttpGet]
         [Authorize(Policy = PolicyNames.HasNationality)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<IEnumerable<DishDto>>> GetAll(int restaurantId)
         {
             var dishes = await mediator.Send(new GetDishesForRestaurantQuery(restaurantId));
@@ -27,6 +29,9 @@ namespace Restaurants.API.Controllers
 
         [HttpGet("{dishId}")]
         //[Authorize(Policy = PolicyNames.AtLeast20)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<DishDto>> GetById(int restaurantId, int dishId)
         {
             var dish = await mediator.Send(new GetDishByIdForRestaurantQuery(restaurantId, dishId));
@@ -35,6 +40,8 @@ namespace Restaurants.API.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> CreateDish(int restaurantId, CreateDishCommand command)
         {
@@ -47,6 +54,10 @@ namespace Restaurants.API.Controllers
         }
 
         [HttpPatch("{dishId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateDish(int restaurantId, int dishId, UpdateDishCommand command)
         {
             command.RestaurantId = restaurantId;
@@ -57,6 +68,8 @@ namespace Restaurants.API.Controllers
 
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteAll(int restaurantId)
         {
             await mediator.Send(new DeleteDishesCommand(restaurantId));
@@ -65,6 +78,8 @@ namespace Restaurants.API.Controllers
 
         [HttpDelete("{dishId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteDish(int restaurantId, int dishId)
         {
             await mediator.Send(new DeleteDishCommand(restaurantId, dishId));

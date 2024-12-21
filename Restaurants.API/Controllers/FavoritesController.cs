@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Restaurants.Application.Restuarants.Commands.FavoriteDish;
 using Restaurants.Application.Restuarants.Commands.FavoriteRestaurant;
@@ -11,9 +11,13 @@ namespace Restaurants.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FavoritesController(IMediator mediator) : ControllerBase
     {
         [HttpGet("Restuarant")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetFavoriteRestaurants()
         {
             var restaurants = await mediator.Send(new GetFavoriteRestaurantsQuery());
@@ -21,6 +25,9 @@ namespace Restaurants.API.Controllers
         }
 
         [HttpPost("Restaurant/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> FavoriteRestaurant(int id)
         {
             await mediator.Send(new FavoriteRestaurantCommand(id));
@@ -28,6 +35,9 @@ namespace Restaurants.API.Controllers
         }
 
         [HttpDelete("Restaurant/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> UnFavoriteRestaurant(int id)
         {
             await mediator.Send(new UnFavoriteRestaurantCommand(id));
@@ -35,6 +45,9 @@ namespace Restaurants.API.Controllers
         }
 
         [HttpPost("Restaurant/{id}/Dish/{dishId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> FavoriteDish(int id, int dishId)
         {
             await mediator.Send(new FavoriteDishCommand(id, dishId));
@@ -42,6 +55,9 @@ namespace Restaurants.API.Controllers
         }
 
         [HttpDelete("Restaurant/{id}/Dish/{dishId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> UnFavoriteDish(int id, int dishId)
         {
             await mediator.Send(new UnFavoriteDishCommand(id, dishId));
