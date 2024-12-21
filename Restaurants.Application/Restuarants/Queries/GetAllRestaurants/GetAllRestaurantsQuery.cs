@@ -10,12 +10,7 @@ using System.Threading.Tasks;
 
 namespace Restaurants.Application.Restuarants.Queries.GetAllRestaurants
 {
-    public class GetAllRestaurantsQuery : IRequest<PagedResult<RestaurantDto>>
+    public class GetAllRestaurantsQuery : PaginatedQuery<RestaurantDto>
     {
-        public string? SearchedPhrase { get; set; }
-        public int PageSize { get; set; }
-        public int PageNumber { get; set; }
-        public string? SortBy { get; set; }
-        public SortDirection sortDirection { get; set; }
     }
 }
