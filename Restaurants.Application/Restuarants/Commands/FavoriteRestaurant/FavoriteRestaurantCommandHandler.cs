@@ -29,8 +29,8 @@ namespace Restaurants.Application.Restuarants.Commands.FavoriteRestaurant
                 throw new NotFoundException(nameof(restaurant), request.RestaurantId.ToString());
 
             var dbFav = await restaurantsRepository.GetFavoriteRestaurants(user.Id, request.RestaurantId);
-            if (dbFav.Count() != 0)
-                throw new InvalidOperationException("You have already favorited this restaurant.");
+            if (dbFav.Any())
+                throw new FavoriteAlreadyExistsException(nameof(restaurant));
 
             var fav = new Domain.Entities.FavoriteRestaurant
             {

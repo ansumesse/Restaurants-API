@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Restaurants.Application.Restuarants.Commands.FavoriteDish
 {
-    public class UnFavoriteDishCommandHandler(ILogger<UnFavoriteDishCommandHandler> logger,
+    public class FavoriteDishCommandHandler(ILogger<FavoriteDishCommandHandler> logger,
         IRestaurantsRepository restaurantsRepository,
         IDishesRepository dishesRepository,
         IUserContext userContext) : IRequestHandler<FavoriteDishCommand>
@@ -37,7 +37,7 @@ namespace Restaurants.Application.Restuarants.Commands.FavoriteDish
 
             var dbFav = await restaurantsRepository.GetFavoriteDish(user.Id, request.RestaurantId, request.DishId);
             if (dbFav != null)
-                throw new InvalidOperationException("You have already favorited this dish.");
+                throw new FavoriteAlreadyExistsException(nameof(Dish));
 
             var fav = new Domain.Entities.FavoriteDish
             {

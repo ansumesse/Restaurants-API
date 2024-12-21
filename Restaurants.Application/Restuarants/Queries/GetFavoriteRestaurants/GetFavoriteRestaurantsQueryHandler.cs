@@ -23,7 +23,7 @@ namespace Restaurants.Application.Restuarants.Queries.GetFavoriteRestaurants
         public async Task<IEnumerable<RestaurantDto>> Handle(GetFavoriteRestaurantsQuery request, CancellationToken cancellationToken)
         {
             var user = userContext.GetCurrentUser();
-            logger.LogInformation(@"Getting User #{UserId} Favorite restaurants", user!.Id);
+            logger.LogInformation(@"Getting User #{UserId} Favorite restaurants", user.Id);
 
             var favRestaurants = await restaurantsRepository.GetFavoriteRestaurants(user.Id);
             if (!favRestaurants.Any())

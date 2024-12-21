@@ -22,10 +22,10 @@ namespace Restaurants.Application.Restuarants.Commands.UnFavoriteDish
         public async Task Handle(UnFavoriteDishCommand request, CancellationToken cancellationToken)
         {
             var user = userContext.GetCurrentUser();
-            logger.LogInformation(@"{UserEmail} favorites Restaurant #{RestaurantId} Dish #{DishId}",
+            logger.LogInformation("{UserEmail} is unfavoriting Dish #{DishId} from Restaurant #{RestaurantId}",
                 user.Email,
-                request.RestaurantId,
-                request.DishId);
+                request.DishId,
+                request.RestaurantId);
 
             var restaurant = await restaurantsRepository.GetRestaurantByIdAsync(request.RestaurantId);
             if (restaurant is null)
@@ -38,7 +38,7 @@ namespace Restaurants.Application.Restuarants.Commands.UnFavoriteDish
             var dbFav = await restaurantsRepository.GetFavoriteDish(user.Id, request.RestaurantId, request.DishId);
 
             if (dbFav is null)
-                throw new InvalidOperationException("You don't have this dish in you Favorites.");
+                throw new FavoriteNotFoundException(nameof(dish), request.DishId.ToString());
 
             await restaurantsRepository.UnFavoriteDishAsync(dbFav);
         }

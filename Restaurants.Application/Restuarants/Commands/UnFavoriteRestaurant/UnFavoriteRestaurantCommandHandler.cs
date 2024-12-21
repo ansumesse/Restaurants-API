@@ -30,8 +30,8 @@ namespace Restaurants.Application.Restuarants.Commands.UnFavoriteRestaurant
 
             var dbFav = await restaurantsRepository.GetFavoriteRestaurants(user.Id, request.RestaurantId);
 
-            if (dbFav.Count() == 0)
-                throw new InvalidOperationException("You don't have this restaurant in you Favorites.");
+            if (!dbFav.Any())
+                throw new FavoriteNotFoundException(nameof(restaurant), request.RestaurantId.ToString());
 
             await restaurantsRepository.UnFavoriteAsync(dbFav.First());
         }
