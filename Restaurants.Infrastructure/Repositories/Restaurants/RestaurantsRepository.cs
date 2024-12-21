@@ -37,6 +37,17 @@ namespace Restaurants.Infrastructure.Repositories.Restaurants
             context.FavoriteRestaurants.Remove(entity);
             await context.SaveChangesAsync();
         }
+        public async Task FavoriteDishAsync(FavoriteDish entity)
+        {
+            await context.FavoriteDishes.AddAsync(entity);
+            await context.SaveChangesAsync();
+        }
+        public async Task UnFavoriteDishAsync(FavoriteDish entity)
+        {
+            context.FavoriteDishes.Remove(entity);
+            await context.SaveChangesAsync();
+        }
+
         public async Task<FavoriteRestaurant?> GetFavoriteRestaurant(string userId, int restaurantId)
         {
             return await context.FavoriteRestaurants.FirstOrDefaultAsync(f => f.UserId == userId && f.RestaurantId == restaurantId);
