@@ -52,6 +52,11 @@ namespace Restaurants.Infrastructure.Repositories.Restaurants
         {
             return await context.FavoriteRestaurants.FirstOrDefaultAsync(f => f.UserId == userId && f.RestaurantId == restaurantId);
         }
+        
+        public async Task<FavoriteDish?> GetFavoriteDish(string userId, int restaurantId, int dishId)
+        {
+            return await context.FavoriteDishes.FirstOrDefaultAsync(f => f.UserId == userId && f.RestaurantId == restaurantId && f.DishId == dishId);
+        }
 
         public async Task<IEnumerable<Restaurant>> GetAllAsync()
         {
