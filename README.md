@@ -218,7 +218,7 @@ GET /api/Restaurant?pageNumber=2&pageSize=5&searchphrase='Kfc'&sortby='Category'
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone <https://github.com/ansumesse/Restaurants-API.git>
    ```
 
 2. Set up the database connection string in `appsettings.json`.
