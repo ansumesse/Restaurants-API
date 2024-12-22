@@ -18,6 +18,7 @@ This project implements a clean architecture pattern for a Restaurants Managemen
 - [Pagination, Sorting, and Searching](#pagination-sorting-and-searching)
 - [How to Run](#how-to-run)
 - [Future Enhancements](#future-enhancements)
+- [Deployment](#deployment)
 
 ---
 
@@ -248,4 +249,13 @@ GET /api/Restaurant?pageNumber=2&pageSize=5&searchphrase='Kfc'&sortby='Category'
 ---
 
 Feel free to contribute by submitting pull requests or issues!
+
+---
+
+## Deployment
+
+The API is deployed on **Monsterasp**. You can access it at the following link:
+
+- [Restaurants API](https://restaurantsapi.runasp.net/index.html)
+
 
