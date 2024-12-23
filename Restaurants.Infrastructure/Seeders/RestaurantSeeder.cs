@@ -14,12 +14,12 @@ namespace Restaurants.Infrastructure.Seeders
         {
             if(await context.Database.CanConnectAsync())
             {
-                if(!await context.Restaurants.AnyAsync())
-                {
-                    var restuarants = GetRestaurants();
-                    await context.AddRangeAsync(restuarants);
-                    await context.SaveChangesAsync();
-                }
+                //if(!await context.Restaurants.AnyAsync())
+                //{
+                //    var restuarants = GetRestaurants();
+                //    await context.AddRangeAsync(restuarants);
+                //    await context.SaveChangesAsync();
+                //}
 
                 if(!await context.Roles.AnyAsync())
                 {
