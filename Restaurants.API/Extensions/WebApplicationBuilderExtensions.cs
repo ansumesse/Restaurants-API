@@ -14,18 +14,26 @@ namespace Restaurants.API.Extensions
                 c.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.Http,
-                    Scheme = "Bearer"
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Enter your Bearer token"
                 });
+
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
             {
+                Reference = new OpenApiReference
                 {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearerAuth"}
-                    },
-                    []
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "bearerAuth"
                 }
-            });
+            },
+            new string[] { } // No specific scopes required, so empty array
+        }
+    });
             });
 
             builder.Services.AddAuthentication();

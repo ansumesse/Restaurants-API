@@ -31,10 +31,14 @@ namespace Restaurants.API
             await seeder.Seed();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                    c.RoutePrefix = string.Empty; // Optional: To make Swagger UI available at the root of the app
+                });
             }
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
