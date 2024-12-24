@@ -16,7 +16,7 @@ namespace Restaurants.Application.Restuarants.Dtos
                 {
                     City = src.City,
                     PostalCode = src.PostalCode,
-                    Street = src.City
+                    Street = src.Street
                 }));
 
             CreateMap<Restaurant, RestaurantDto>()
