@@ -4,7 +4,7 @@ using Restaurants.Domain.Repositories.Restaurants;
 
 namespace Restaurants.Infrastructure.Authorization.Requirements.MinimalNumberOfCreatedRestaurant
 {
-    public class MinimalNumberOfCreatedRestaurantRequirementHandler(IUserContext userContext,
+    internal class MinimalNumberOfCreatedRestaurantRequirementHandler(IUserContext userContext,
         IRestaurantsRepository restaurantsRepository) : AuthorizationHandler<MinimalNumberOfCreatedRestaurantRequirement>
     {
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, MinimalNumberOfCreatedRestaurantRequirement requirement)
