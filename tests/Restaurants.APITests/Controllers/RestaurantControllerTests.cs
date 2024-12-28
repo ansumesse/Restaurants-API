@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Restaurants.API.Controllers;
+using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
 using FluentAssertions;
 using Moq;
@@ -12,6 +13,7 @@ using Restaurants.Application.Restuarants.Dtos;
 using Restaurants.Domain.Entities;
 using System.Net.Http.Json;
 using System.Net;
+using Restaurants.Application.Restuarants.Commands.CreateRestaurant;
 
 namespace Restaurants.API.Controllers.Tests
 {
@@ -19,6 +21,7 @@ namespace Restaurants.API.Controllers.Tests
     {
         private readonly WebApplicationFactory<Program> _factory;
         private readonly Mock<IRestaurantsRepository> _restaurantsRepositoryMock = new();
+        HttpClient client ;
         public RestaurantControllerTests(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
@@ -31,13 +34,14 @@ namespace Restaurants.API.Controllers.Tests
                                                 _ => _restaurantsRepositoryMock.Object));
                 });
             });
+
+            client = _factory.CreateClient();
         }
 
         [Fact()]
         public async Task GetAll_ForValidRequest_Returns200Ok()
         {
             // Arrange
-            var client = _factory.CreateClient();
 
             // Act
             var result = await client.GetAsync("api/Restaurant");
@@ -53,7 +57,6 @@ namespace Restaurants.API.Controllers.Tests
             var id = 1123;
             _restaurantsRepositoryMock.Setup(m => m.GetRestaurantByIdAsync(id)).ReturnsAsync((Restaurant?)null);
 
-            var client = _factory.CreateClient();
             // act
             var response = await client.GetAsync($"/api/restaurant/{id}");
 
@@ -73,7 +76,6 @@ namespace Restaurants.API.Controllers.Tests
                 Description = "Test description"
             };
             _restaurantsRepositoryMock.Setup(m => m.GetRestaurantByIdAsync(id)).ReturnsAsync(restaurant);
-            var client = _factory.CreateClient();
 
             // act
             var response = await client.GetAsync($"/api/restaurant/{id}");
@@ -85,5 +87,6 @@ namespace Restaurants.API.Controllers.Tests
             restaurantDto.Name.Should().Be("Test");
             restaurantDto.Description.Should().Be("Test description");
         }
+
     }
 }
