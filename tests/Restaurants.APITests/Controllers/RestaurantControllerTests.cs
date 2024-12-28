@@ -88,5 +88,46 @@ namespace Restaurants.API.Controllers.Tests
             restaurantDto.Description.Should().Be("Test description");
         }
 
+        [Fact()]
+        public async Task Create_ValidRestaurant_ShouldReturn201Created()
+        {
+            // Arrange
+            var command = new CreateRestaurantCommand()
+            {
+                Name = "Test",
+                Description = "test",
+                Category = "Italian",
+                ContactEmail = "test@test.com",
+                PostalCode = "22-345"
+            };
+
+
+            // Act
+            var response = await client.PostAsJsonAsync("/api/restaurant", command);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+        }
+        [Fact()]
+        public async Task Create_InValidRestaurant_ShouldReturn400BadRequest()
+        {
+            // Arrange
+            var command = new CreateRestaurantCommand()
+            {
+                Name = "Test",
+                Description = "test",
+                Category = "Egyptian",
+                ContactEmail = "test@test.com",
+                PostalCode = "22-345"
+            };
+
+
+            // Act
+            var response = await client.PostAsJsonAsync("/api/restaurant", command);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
     }
 }

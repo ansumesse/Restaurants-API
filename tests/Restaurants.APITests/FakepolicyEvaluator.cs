@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Http;
+using Restaurants.Domain.Constants;
 using System.Security.Claims;
 
 namespace Restaurants.APITests
@@ -10,13 +11,15 @@ namespace Restaurants.APITests
     {
         public Task<AuthenticateResult> AuthenticateAsync(AuthorizationPolicy policy, HttpContext context)
         {
-            var claimsPrincipal = new ClaimsPrincipal();
-            claimsPrincipal.AddIdentity(new ClaimsIdentity(
-                new[]
+            var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(
+                new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, "1"),
-                    new Claim(ClaimTypes.Role, "Admin"),
-                }));
+                    new Claim(ClaimTypes.Email, "Test@test.com"),
+                    new Claim(ClaimTypes.Role, UserRoles.Admin),
+                    new Claim(ClaimTypes.Role, UserRoles.Owner),
+                    new Claim(ClaimTypes.Role, UserRoles.User),
+                }, "Test"));
             var ticket = new AuthenticationTicket(claimsPrincipal, "Test");
             var result = AuthenticateResult.Success(ticket);
             return Task.FromResult(result);
