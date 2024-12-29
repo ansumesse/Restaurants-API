@@ -16,7 +16,6 @@ namespace Restaurants.API.Controllers
         [AllowAnonymous]
         [HttpPatch("User")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateUserDetails(UpdateUserDetailsCommand command)
         {
