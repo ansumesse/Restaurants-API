@@ -333,5 +333,66 @@ namespace Restaurants.API.Controllers.Tests
             result.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
+        [Fact()]
+        public async Task DeleteDish_ForValidRequest_Returns204NoContent()
+        {
+            // Arrange
+            var restaurant = new Restaurant
+            {
+                Id = 1,
+                OwnerId = "1"
+            };
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(1))
+                .ReturnsAsync(restaurant);
+
+            var oldDish = new Dish
+            {
+                Id = 1,
+                RestaurantId = 1
+            };
+            dishesRepositoryMock.Setup(d => d.GetRestaurantDishById(restaurant, oldDish.Id))
+                .Returns(oldDish);
+            // Act
+            var result = await client.DeleteAsync($"api/Restaurant/{1}/Dishes/{1}");
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        }
+        [Fact()]
+        public async Task DeleteDish_ForNonExistingRestaurant_Returns404NotFound()
+        {
+            // Arrange
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(1))
+                .ReturnsAsync((Restaurant?)null);
+
+            // Act
+            var result = await client.DeleteAsync($"api/Restaurant/{1}/Dishes/{1}");
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+        [Fact()]
+        public async Task DeleteDish_ForNonExistingDish_Returns404NotFound()
+        {
+            // Arrange
+            var restaurant = new Restaurant
+            {
+                Id = 1,
+                OwnerId = "1"
+            };
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(1))
+                .ReturnsAsync(restaurant);
+
+
+            dishesRepositoryMock.Setup(d => d.GetRestaurantDishById(restaurant, 1))
+                .Returns((Dish?)null);
+
+            // Act
+            var result = await client.DeleteAsync($"api/Restaurant/{1}/Dishes/{1}");
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
     }
 }
