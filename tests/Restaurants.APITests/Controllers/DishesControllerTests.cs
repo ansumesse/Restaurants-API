@@ -15,6 +15,7 @@ using Restaurants.Application.Dishes.Dtos;
 using FluentAssertions;
 using System.Net;
 using Restaurants.Application.Dishes.Commands.CreateDish;
+using Restaurants.Application.Dishes.Commands.UpdateDish;
 
 namespace Restaurants.API.Controllers.Tests
 {
@@ -136,7 +137,7 @@ namespace Restaurants.API.Controllers.Tests
                 Description = "Test Description"
             };
             // Act
-            var result = await client.PostAsJsonAsync($"api/Restaurant/{1}/Dishes", command); 
+            var result = await client.PostAsJsonAsync($"api/Restaurant/{1}/Dishes", command);
 
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -180,6 +181,116 @@ namespace Restaurants.API.Controllers.Tests
 
             // Act
             var result = await client.PostAsJsonAsync($"api/Restaurant/{1}/Dishes", command);
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+       
+        [Fact()]
+        public async Task UpdateDish_ForValidRequest_Returns204NoContent()
+        {
+            // Arrange
+            var restaurant = new Restaurant
+            {
+                Id = 1,
+                OwnerId = "1"
+            };
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(1))
+                .ReturnsAsync(restaurant);
+
+            var oldDish = new Dish
+            {
+                Id = 1,
+                RestaurantId = 1
+            };
+            dishesRepositoryMock.Setup(d => d.GetRestaurantDishById(restaurant, oldDish.Id))
+                .Returns(oldDish);
+
+            var command = new UpdateDishCommand()
+            {
+                Price = 100,
+                KiloCalories = 100,
+                Description = "Test Description"
+            };
+            // Act
+            var result = await client.PatchAsJsonAsync($"api/Restaurant/{1}/Dishes/{1}", command);
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        }
+        [Fact()]
+        public async Task UpdateDish_ForInValidRequest_Returns400BadRequest()
+        {
+            // Arrange
+            var restaurant = new Restaurant
+            {
+                Id = 1,
+                OwnerId = "1"
+            };
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(1))
+                .ReturnsAsync(restaurant);
+
+            var oldDish = new Dish
+            {
+                Id = 1,
+                RestaurantId = 1
+            };
+            dishesRepositoryMock.Setup(d => d.GetRestaurantDishById(restaurant, oldDish.Id))
+                .Returns(oldDish);
+
+            var command = new UpdateDishCommand()
+            {
+                Price = 100
+            };
+            // Act
+            var result = await client.PatchAsJsonAsync($"api/Restaurant/{1}/Dishes/{1}", command);
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+        [Fact()]
+        public async Task UpdateDish_ForNonExistingRestaurant_Returns404NotFound()
+        {
+            // Arrange
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(1))
+                .ReturnsAsync((Restaurant?)null);
+
+            var command = new UpdateDishCommand()
+            {
+                Price = 100,
+                KiloCalories = 100,
+                Description = "Test Description"
+            };
+            // Act
+            var result = await client.PatchAsJsonAsync($"api/Restaurant/{1}/Dishes/{1}", command);
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+        [Fact()]
+        public async Task UpdateDish_ForNonExistingDish_Returns404NotFound()
+        {
+            // Arrange
+            var restaurant = new Restaurant
+            {
+                Id = 1,
+                OwnerId = "1"
+            };
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(1))
+                .ReturnsAsync(restaurant);
+
+     
+            dishesRepositoryMock.Setup(d => d.GetRestaurantDishById(restaurant, 1))
+                .Returns((Dish?)null);
+
+            var command = new UpdateDishCommand()
+            {
+                Price = 100,
+                KiloCalories = 100,
+                Description = "Test Description"
+            };
+            // Act
+            var result = await client.PatchAsJsonAsync($"api/Restaurant/{1}/Dishes/{1}", command);
 
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.NotFound);
