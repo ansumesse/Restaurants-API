@@ -12,9 +12,13 @@ using Microsoft.Extensions.Options;
 using Moq;
 using Restaurants.APITests;
 using Restaurants.Application.Users.Commands.AssignUserRole;
+using Restaurants.Application.Users.Commands.UnassignUserRole;
 using Restaurants.Application.Users.Commands.UpdateUserDetails;
 using Restaurants.Domain.Constants;
 using Restaurants.Domain.Entities;
+using System.Text;
+using System.Text.Json;
+using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace Restaurants.API.Controllers.Tests
 {
@@ -193,6 +197,137 @@ namespace Restaurants.API.Controllers.Tests
 
             // Act
             var result = await client.PostAsJsonAsync("api/Identity/UserRole", command);
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact()]
+        public async Task UnAssignUserRole_ForValidRequest_Returns204NoContent()
+        {
+            // Arrange
+            var user = new User()
+            {
+                Id = "1",
+            };
+            _userManagerMock.Setup(u => u.FindByEmailAsync("test@test.com"))
+                .ReturnsAsync(user);
+
+            var role = new IdentityRole(UserRoles.Admin);
+            _roleManagerMock.Setup(r => r.FindByNameAsync("Admin"))
+                .ReturnsAsync(role);
+
+            var command = new UnassignUserRoleCommand()
+            {
+                Email = "test@test.com",
+                Role = "Admin"
+            };
+
+            HttpRequestMessage request = new HttpRequestMessage
+            {
+                Content = JsonContent.Create(command),
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri("api/Identity/UserRole", UriKind.Relative)
+            };
+            // Act
+            var result = await client.SendAsync(request);
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NoContent);
+            _userManagerMock.Verify(u => u.RemoveFromRoleAsync(user, role.Name), Times.Once);
+        }
+        [Fact()]
+        public async Task UnAssignUserRole_ForInValidRequest_Returns400BadRequest()
+        {
+            // Arrange
+            var user = new User()
+            {
+                Id = "1",
+            };
+            _userManagerMock.Setup(u => u.FindByEmailAsync("test@test.com"))
+                .ReturnsAsync(user);
+
+            var role = new IdentityRole(UserRoles.Admin);
+            _roleManagerMock.Setup(r => r.FindByNameAsync("Admin"))
+                .ReturnsAsync(role);
+
+            var command = new UnassignUserRoleCommand()
+            {
+                Role = "Admin"
+            };
+
+            HttpRequestMessage request = new HttpRequestMessage
+            {
+                Content = JsonContent.Create(command),
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri("api/Identity/UserRole", UriKind.Relative)
+            };
+
+            // Act
+            var result = await client.SendAsync(request);
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+        [Fact()]
+        public async Task UnAssignUserRole_ForNonExistingUser_Returns404NotFound()
+        {
+            // Arrange
+            _userManagerMock.Setup(u => u.FindByEmailAsync("test@test.com"))
+                .ReturnsAsync((User?)null);
+
+            var role = new IdentityRole(UserRoles.Admin);
+            _roleManagerMock.Setup(r => r.FindByNameAsync("Admin"))
+                .ReturnsAsync(role);
+
+            var command = new AssignUserRoleCommand()
+            {
+                Email = "test@test.com",
+                Role = "Admin"
+            };
+
+            HttpRequestMessage request = new HttpRequestMessage
+            {
+                Content = JsonContent.Create(command),
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri("api/Identity/UserRole", UriKind.Relative)
+            };
+
+            // Act
+            var result = await client.SendAsync(request);
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+        [Fact()]
+        public async Task UnAssignUserRole_ForNonExistingRole_Returns204NoContent()
+        {
+            // Arrange
+            var user = new User()
+            {
+                Id = "1",
+            };
+            _userManagerMock.Setup(u => u.FindByEmailAsync("test@test.com"))
+                .ReturnsAsync(user);
+
+            _roleManagerMock.Setup(r => r.FindByNameAsync("Admin"))
+                .ReturnsAsync((IdentityRole?)null);
+
+            var command = new AssignUserRoleCommand()
+            {
+                Email = "test@test.com",
+                Role = "Admin"
+            };
+
+            HttpRequestMessage request = new HttpRequestMessage
+            {
+                Content = JsonContent.Create(command),
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri("api/Identity/UserRole", UriKind.Relative)
+            };
+
+            // Act
+            var result = await client.SendAsync(request);
 
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.NotFound);
