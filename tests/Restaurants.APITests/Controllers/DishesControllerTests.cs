@@ -296,5 +296,42 @@ namespace Restaurants.API.Controllers.Tests
             result.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
+        [Fact()]
+        public async Task DeleteAll_ForValidRequest_Returns204NoContent()
+        {
+            // Arrange
+            var restaurant = new Restaurant
+            {
+                Id = 1,
+                Dishes = [
+                   new Dish{Id = 1},
+                    new Dish{Id = 2},
+                    new Dish{Id = 3}
+                   ],
+                OwnerId = "1"
+            };
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(1))
+                .ReturnsAsync(restaurant);
+         
+            // Act
+            var result = await client.DeleteAsync($"api/Restaurant/{1}/Dishes");
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        }
+        [Fact()]
+        public async Task DeleteAll_ForNonExistingRestaurant_Returns404NotFound()
+        {
+            // Arrange
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(1))
+                .ReturnsAsync((Restaurant?)null);
+
+            // Act
+            var result = await client.DeleteAsync($"api/Restaurant/{1}/Dishes");
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
     }
 }
