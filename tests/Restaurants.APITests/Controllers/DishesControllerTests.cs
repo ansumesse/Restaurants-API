@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Restaurants.API.Controllers;
+using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Moq;
 using Restaurants.Domain.Repositories.Restaurants;
@@ -13,6 +14,7 @@ using System.Net.Http.Json;
 using Restaurants.Application.Dishes.Dtos;
 using FluentAssertions;
 using System.Net;
+using Restaurants.Application.Dishes.Commands.CreateDish;
 
 namespace Restaurants.API.Controllers.Tests
 {
@@ -113,5 +115,75 @@ namespace Restaurants.API.Controllers.Tests
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
+
+        [Fact()]
+        public async Task CreateDish_ForValidRequest_Returns201Created()
+        {
+            // Arrange
+            var restaurant = new Restaurant
+            {
+                Id = 1,
+                OwnerId = "1"
+            };
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(1))
+                .ReturnsAsync(restaurant);
+
+            var command = new CreateDishCommand()
+            {
+                Name = "Test",
+                Price = 100,
+                KiloCalories = 100,
+                Description = "Test Description"
+            };
+            // Act
+            var result = await client.PostAsJsonAsync($"api/Restaurant/{1}/Dishes", command); 
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.Created);
+        }
+        [Fact()]
+        public async Task CreateDish_ForinvalidDish_Returns400BadRequest()
+        {
+            // Arrange
+            var restaurant = new Restaurant
+            {
+                Id = 1,
+                OwnerId = "1"
+            };
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(1))
+                .ReturnsAsync(restaurant);
+
+            var command = new CreateDishCommand()
+            {
+                Name = "Test"
+            };
+            // Act
+            var result = await client.PostAsJsonAsync($"api/Restaurant/{1}/Dishes", command);
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+        [Fact()]
+        public async Task CreateDish_ForNonExistingRestaurant_Returns404NotFound()
+        {
+            // Arrange
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(1))
+                .ReturnsAsync((Restaurant?)null);
+
+            var command = new CreateDishCommand()
+            {
+                Name = "Test",
+                Price = 100,
+                KiloCalories = 100,
+                Description = "Test Description"
+            };
+
+            // Act
+            var result = await client.PostAsJsonAsync($"api/Restaurant/{1}/Dishes", command);
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
     }
 }
