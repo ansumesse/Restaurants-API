@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using Restaurants.APITests;
 using Restaurants.Application.Users.Commands.AssignUserRole;
+using Restaurants.Application.Users.Commands.UpdateUserDetails;
 using Restaurants.Domain.Constants;
 using Restaurants.Domain.Entities;
 
@@ -63,14 +64,17 @@ namespace Restaurants.API.Controllers.Tests
             var user = new User()
             {
                 Id = "1",
-                DateOfBirth = DateOnly.FromDateTime(DateTime.Now),
-                Nationality = "German"
             };
             _userStoreMock.Setup(u => u.FindByIdAsync("1", default))
                 .ReturnsAsync(user);
 
+            var command = new UpdateUserDetailsCommand
+            {
+                DateOfBirth = DateOnly.FromDateTime(DateTime.Now),
+                Nationality = "German"
+            };
             // Act
-            var result = await client.PatchAsJsonAsync("api/Identity/User", user);
+            var result = await client.PatchAsJsonAsync("api/Identity/User", command);
 
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.NoContent);
