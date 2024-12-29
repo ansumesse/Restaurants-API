@@ -20,6 +20,7 @@ namespace Restaurants.API.Controllers
         [HttpGet]
         [Authorize(Policy = PolicyNames.HasNationality)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<IEnumerable<DishDto>>> GetAll(int restaurantId)
         {

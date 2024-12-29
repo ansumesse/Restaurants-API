@@ -19,6 +19,7 @@ namespace Restaurants.APITests
                     new Claim(ClaimTypes.Role, UserRoles.Admin),
                     new Claim(ClaimTypes.Role, UserRoles.Owner),
                     new Claim(ClaimTypes.Role, UserRoles.User),
+                    new Claim(AppClaimTypes.Nationality, "German")
                 }, "Test"));
             var ticket = new AuthenticationTicket(claimsPrincipal, "Test");
             var result = AuthenticateResult.Success(ticket);
