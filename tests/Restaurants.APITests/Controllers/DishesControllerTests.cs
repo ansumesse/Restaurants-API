@@ -74,5 +74,44 @@ namespace Restaurants.API.Controllers.Tests
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
+        [Fact()]
+        public async Task GetById_ForExistingDish_Returns200Ok()
+        {
+            // Arrange
+            var restaurant = new Restaurant
+            {
+                Id = 1,
+                Dishes = [
+                    new Dish{Id = 1, Name = "Test Dish"}
+                    ]
+            };
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(1))
+                .ReturnsAsync(restaurant);
+
+            // Act
+            var result = await client.GetAsync($"api/Restaurant/{1}/Dishes/1");
+            var disheDto = await result.Content.ReadFromJsonAsync<DishDto>();
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.OK);
+            disheDto.Id.Should().Be(1);
+        }
+        [Fact()]
+        public async Task GetById_ForNonExistingDish_Returns404NotFound()
+        {
+            // Arrange
+            var restaurant = new Restaurant
+            {
+                Id = 1
+            };
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(1))
+                .ReturnsAsync(restaurant);
+
+            // Act
+            var result = await client.GetAsync($"api/Restaurant/{1}/Dishes/1");
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
     }
 }
