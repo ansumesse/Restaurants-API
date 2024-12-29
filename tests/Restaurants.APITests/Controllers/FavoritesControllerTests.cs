@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using Restaurants.API.Controllers;
+using System.Net;
+using System.Net.Http.Json;
 using FluentAssertions;
 using Microsoft.AspNetCore.Authorization.Policy;
 using Xunit;
@@ -56,7 +58,7 @@ namespace Restaurants.API.Controllers.Tests
 
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.OK);
-        } 
+        }
         [Fact()]
         public async Task GetFavoriteRestaurants_ForNonExistingFavoriteRestaurant_Returns404NotFound()
         {
@@ -66,6 +68,39 @@ namespace Restaurants.API.Controllers.Tests
 
             // Act
             var result = await client.GetAsync("api/Favorites/Restuarant");
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact()]
+        public async Task FavoriteRestaurant_ForExistingOne_Returns204NoContent()
+        {
+            // Arrange
+            var restaurant = new Restaurant()
+            {
+                Id = 1,
+            };
+
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(restaurant.Id))
+                .ReturnsAsync(restaurant);
+
+            // Act
+            var result = await client.PostAsJsonAsync($"/api/Favorites/Restaurant/{restaurant.Id}", new { });
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NoContent);
+            restaurantsRepositoryMock.Verify(r => r.FavoriteAsync(It.IsAny<FavoriteRestaurant>()), Times.Once);
+        }
+        [Fact()]
+        public async Task FavoriteRestaurant_ForNonExistingOne_Returns404NotFound()
+        {
+            // Arrange
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(1))
+                .ReturnsAsync((Restaurant?)null);
+
+            // Act
+            var result = await client.PostAsJsonAsync($"/api/Favorites/Restaurant/{1}", new { });
 
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.NotFound);
