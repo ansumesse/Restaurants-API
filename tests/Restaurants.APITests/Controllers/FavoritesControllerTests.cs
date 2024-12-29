@@ -105,5 +105,72 @@ namespace Restaurants.API.Controllers.Tests
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
+        [Fact()]
+        public async Task UnFavoriteRestaurant_ForExistingOne_Returns204NoContent()
+        {
+            // Arrange
+            var restaurant = new Restaurant()
+            {
+                Id = 1,
+            };
+
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(restaurant.Id))
+                .ReturnsAsync(restaurant);
+
+            var favouriteRestaurants = new List<FavoriteRestaurant>
+            {
+                new FavoriteRestaurant() { Id = 1, RestaurantId = 1, UserId = "1" }
+            };
+            restaurantsRepositoryMock.Setup(r => r.GetFavoriteRestaurants("1", 1))
+                .ReturnsAsync(favouriteRestaurants);
+
+            // Act
+            var result = await client.DeleteAsync($"/api/Favorites/Restaurant/{restaurant.Id}");
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NoContent);
+            restaurantsRepositoryMock.Verify(r => r.UnFavoriteAsync(It.IsAny<FavoriteRestaurant>()), Times.Once);
+        }
+        [Fact()]
+        public async Task UnFavoriteRestaurant_ForNonExistingRestaurant_Returns404NotFound()
+        {
+            // Arrange
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(1))
+                .ReturnsAsync((Restaurant?)null);
+
+            var favouriteRestaurants = new List<FavoriteRestaurant>
+            {
+                new FavoriteRestaurant() { Id = 1, RestaurantId = 1, UserId = "1" }
+            };
+            restaurantsRepositoryMock.Setup(r => r.GetFavoriteRestaurants("1", 1))
+                .ReturnsAsync(favouriteRestaurants);
+
+            // Act
+            var result = await client.DeleteAsync($"/api/Favorites/Restaurant/1");
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+        [Fact()]
+        public async Task UnFavoriteRestaurant_ForNonExistingFavoriteRestaurant_Returns404NotFound()
+        {
+            // Arrange
+            var restaurant = new Restaurant()
+            {
+                Id = 1,
+            };
+
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(restaurant.Id))
+                .ReturnsAsync(restaurant);
+
+            restaurantsRepositoryMock.Setup(r => r.GetFavoriteRestaurants("1", 1))
+                .ReturnsAsync(new List<FavoriteRestaurant>());
+
+            // Act
+            var result = await client.DeleteAsync($"/api/Favorites/Restaurant/{restaurant.Id}");
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
     }
 }
