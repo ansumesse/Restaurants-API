@@ -106,6 +106,32 @@ namespace Restaurants.API.Controllers.Tests
             result.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
         [Fact()]
+        public async Task FavoriteRestaurant_ForExistingFavoriteRestaurant_Returns405MethodNotAllowed()
+        {
+            // Arrange
+            var restaurant = new Restaurant()
+            {
+                Id = 1,
+            };
+
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(restaurant.Id))
+                .ReturnsAsync(restaurant);
+
+            var favouriteRestaurants = new List<FavoriteRestaurant>
+            {
+                new FavoriteRestaurant() { Id = 1, RestaurantId = 1, UserId = "1" }
+            };
+            restaurantsRepositoryMock.Setup(r => r.GetFavoriteRestaurants("1", 1))
+                .ReturnsAsync(favouriteRestaurants);
+
+            // Act
+            var result = await client.PostAsJsonAsync($"/api/Favorites/Restaurant/{1}", new { });
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.MethodNotAllowed);
+        }
+
+        [Fact()]
         public async Task UnFavoriteRestaurant_ForExistingOne_Returns204NoContent()
         {
             // Arrange
