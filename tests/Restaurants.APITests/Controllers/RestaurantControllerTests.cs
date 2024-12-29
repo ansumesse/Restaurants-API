@@ -181,10 +181,42 @@ namespace Restaurants.API.Controllers.Tests
             };
 
             _restaurantsRepositoryMock.Setup(repo => repo.GetRestaurantByIdAsync(1))
-                .ReturnsAsync((Restaurant?) null);
+                .ReturnsAsync((Restaurant?)null);
 
             // Act
             var result = await client.PatchAsJsonAsync($"/api/restaurant/{1}", command);
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact()]
+        public async Task Delete_ExistingRestaurant_ShouldReturn204NoContent()
+        {
+            // Arrange
+            var restaurant = new Restaurant()
+            {
+                Id = 1,
+                Name = "Test",
+                Description = "Test description"
+            };
+            _restaurantsRepositoryMock.Setup(m => m.GetRestaurantByIdAsync(1)).ReturnsAsync(restaurant);
+
+            // Act
+            var result = await client.DeleteAsync($"/api/restaurant/{1}");
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        }
+        [Fact]
+        public async Task Delete_NonExistingRestaurant_ShouldReturn404NotFound()
+        {
+            // Arrange
+            _restaurantsRepositoryMock.Setup(repo => repo.GetRestaurantByIdAsync(1))
+                .ReturnsAsync((Restaurant?)null);
+
+            // Act
+            var result = await client.DeleteAsync($"/api/restaurant/{1}");
 
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.NotFound);
