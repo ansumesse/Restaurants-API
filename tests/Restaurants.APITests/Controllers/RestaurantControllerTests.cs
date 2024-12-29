@@ -14,6 +14,7 @@ using Restaurants.Domain.Entities;
 using System.Net.Http.Json;
 using System.Net;
 using Restaurants.Application.Restuarants.Commands.CreateRestaurant;
+using Restaurants.Application.Restuarants.Commands.UpdateRestaurant;
 
 namespace Restaurants.API.Controllers.Tests
 {
@@ -21,7 +22,7 @@ namespace Restaurants.API.Controllers.Tests
     {
         private readonly WebApplicationFactory<Program> _factory;
         private readonly Mock<IRestaurantsRepository> _restaurantsRepositoryMock = new();
-        HttpClient client ;
+        HttpClient client;
         public RestaurantControllerTests(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
@@ -129,5 +130,64 @@ namespace Restaurants.API.Controllers.Tests
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
+        [Fact()]
+        public async Task Update_ValidRestaurant_ShouldReturn204NoContent()
+        {
+            // Arrange
+            var command = new UpdateRestaurantCommand()
+            {
+                Name = "Test",
+                Description = "test",
+            };
+
+            var restaurant = new Restaurant { Id = 1, Name = "Old Name", OwnerId = "1" };
+            _restaurantsRepositoryMock.Setup(repo => repo.GetRestaurantByIdAsync(restaurant.Id))
+                .ReturnsAsync(restaurant);
+
+            // Act
+            var result = await client.PatchAsJsonAsync($"/api/restaurant/{restaurant.Id}", command);
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        }
+        [Fact]
+        public async Task Update_InValidRestaurant_ShouldReturn400BadRequest()
+        {
+            // Arrange
+            var command = new UpdateRestaurantCommand()
+            {
+                Name = "Te",
+                Description = "test",
+            };
+
+            var restaurant = new Restaurant { Id = 1, Name = "Old Name", OwnerId = "1" };
+            _restaurantsRepositoryMock.Setup(repo => repo.GetRestaurantByIdAsync(restaurant.Id))
+                .ReturnsAsync(restaurant);
+
+            // Act
+            var result = await client.PatchAsJsonAsync($"/api/restaurant/{restaurant.Id}", command);
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+        [Fact]
+        public async Task Update_NonExistingRestaurant_ShouldReturn404NotFound()
+        {
+            // Arrange
+            var command = new UpdateRestaurantCommand()
+            {
+                Name = "Test",
+                Description = "test",
+            };
+
+            _restaurantsRepositoryMock.Setup(repo => repo.GetRestaurantByIdAsync(1))
+                .ReturnsAsync((Restaurant?) null);
+
+            // Act
+            var result = await client.PatchAsJsonAsync($"/api/restaurant/{1}", command);
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
     }
 }
