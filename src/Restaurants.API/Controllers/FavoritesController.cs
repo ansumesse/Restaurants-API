@@ -48,6 +48,7 @@ namespace Restaurants.API.Controllers
         [HttpPost("Restaurant/{id}/Dish/{dishId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status405MethodNotAllowed)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> FavoriteDish(int id, int dishId)
         {

@@ -198,5 +198,98 @@ namespace Restaurants.API.Controllers.Tests
             // Assert
             result.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
+
+        [Fact()]
+        public async Task FavoriteDish_ForExistingOne_Returns204NoContent()
+        {
+            // Arrange
+            var restaurant = new Restaurant()
+            {
+                Id = 1,
+            };
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(restaurant.Id))
+                .ReturnsAsync(restaurant);
+
+            var dish = new Dish()
+            {
+                Id = 1
+            };
+            dishsRepositoryMock.Setup(d => d.GetRestaurantDishById(restaurant, dish.Id))
+                .Returns(dish);
+
+            restaurantsRepositoryMock.Setup(r => r.GetFavoriteDish("1", 1, 1))
+                .ReturnsAsync((FavoriteDish?)null);
+
+            // Act
+            var result =
+                await client.PostAsJsonAsync($"/api/Favorites/Restaurant/{restaurant.Id}/Dish/{dish.Id}", new { });
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NoContent);
+            restaurantsRepositoryMock.Verify(r => r.FavoriteDishAsync(It.IsAny<FavoriteDish>()), Times.Once);
+        }
+        [Fact()]
+        public async Task FavoriteDish_ForNonExistingRestaurant_Returns404NotFound()
+        {
+            // Arrange
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(1))
+                .ReturnsAsync((Restaurant?)null);
+
+            // Act
+            var result =
+                await client.PostAsJsonAsync($"/api/Favorites/Restaurant/1/Dish/1", new { });
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+        [Fact()]
+        public async Task FavoriteDish_ForNonExistingDish_Returns404NotFound()
+        {
+            // Arrange
+            var restaurant = new Restaurant()
+            {
+                Id = 1,
+            };
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(restaurant.Id))
+                .ReturnsAsync(restaurant);
+
+            dishsRepositoryMock.Setup(d => d.GetRestaurantDishById(restaurant, 1))
+                .Returns((Dish?)null);
+
+            // Act
+            var result =
+                await client.PostAsJsonAsync($"/api/Favorites/Restaurant/{restaurant.Id}/Dish/1", new { });
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+        [Fact()]
+        public async Task FavoriteDish_ForAlreadyFavoriteDish_Returns405MethodNotAllowed()
+        {
+            // Arrange
+            var restaurant = new Restaurant()
+            {
+                Id = 1,
+            };
+            restaurantsRepositoryMock.Setup(r => r.GetRestaurantByIdAsync(restaurant.Id))
+                .ReturnsAsync(restaurant);
+
+            var dish = new Dish()
+            {
+                Id = 1
+            };
+            dishsRepositoryMock.Setup(d => d.GetRestaurantDishById(restaurant, dish.Id))
+                .Returns(dish);
+
+            restaurantsRepositoryMock.Setup(r => r.GetFavoriteDish("1", 1, 1))
+                .ReturnsAsync(new FavoriteDish(){Id = 1});
+
+            // Act
+            var result =
+                await client.PostAsJsonAsync($"/api/Favorites/Restaurant/{restaurant.Id}/Dish/{dish.Id}", new { });
+
+            // Assert
+            result.StatusCode.Should().Be(HttpStatusCode.MethodNotAllowed);
+        }
     }
 }
